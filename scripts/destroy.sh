@@ -18,6 +18,12 @@ echo "Preparing to destroy $PROJECT_NAME-$ENVIRONMENT infrastructure..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+# Build Lambda package because Terraform evaluates source_code_hash during destroy
+echo "Building Lambda package required by Terraform..."
+
+cd "$PROJECT_ROOT/backend"
+uv run deploy.py
+
 # Navigate to Terraform directory
 cd "$PROJECT_ROOT/terraform"
 
